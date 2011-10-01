@@ -15,4 +15,6 @@ val distance   : Coord.t -> Coord.t -> int
 val go         : t -> Coord.t -> direction -> Coord.t option
 
 val parse_mazes              : string -> t list
+
+(** String of the maze with path overlaid on it. *)
 val string_of_maze_with_path : t -> Coord.t list -> string

@@ -38,6 +38,7 @@ let distance (r1, c1) (r2, c2) =
 let start maze = let height = Array.length maze in (height - 2, 1)
 let goal maze  = let width  = Array.length maze.(0) in (1, width - 2)
 
+(* Simple hand-rolled parser. Sufficient for our simple need *)
 let parse_maze =
     let is_grid_char c = c = '|' || c = '_' || c = ' ' in
 
