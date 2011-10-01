@@ -1,0 +1,4 @@
+.paths
+.project
+_build/
+*.byte

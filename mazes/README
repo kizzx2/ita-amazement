@@ -1,0 +1,6 @@
+This archive contains sample files for the "ASCII A-maze-ment" puzzle
+posted on http://www.itasoftware.com/careers .
+
+The files input*.txt are sample input that your program should be able
+to handle.  The output*.txt files illustrate the output produced by a
+successful maze solver on the respective input files.
