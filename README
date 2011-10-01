@@ -1,0 +1,1 @@
+The problem comes from ITA Puzzle Archive <http://www.itasoftware.com/careers/puzzle_archive.html>. This could have been done using one file with < 200 lines of code but we're doing it the modular way to exercise OCaml's module system.
