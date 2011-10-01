@@ -2,11 +2,7 @@ open Batteries_uni
 
 module type MazeSig = sig
     type t
-
-    module Coord : sig
-        type t
-        val compare : t -> t -> int
-    end
+    module Coord : Map.OrderedType
     
     type direction
     val directions : direction list

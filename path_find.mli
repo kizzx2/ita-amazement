@@ -3,7 +3,7 @@ module type MazeSig =
         type t
         type direction
         
-        module Coord : sig type t val compare : t -> t -> int end
+        module Coord : Map.OrderedType
         
         val directions : direction list
         val distance   : Coord.t -> Coord.t -> int
