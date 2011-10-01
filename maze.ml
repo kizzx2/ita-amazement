@@ -66,7 +66,7 @@ let string_of_maze maze =
 
     padding ^ string_of_line maze.(0) ^ "ITA\n" |> Buffer.add_string buf;
     flip Enum.iter (1--(num_lines - 2))
-	    ( fun i ->
+        ( fun i ->
           Buffer.add_string buf padding
         ; Buffer.add_string buf (string_of_line maze.(i))
         ; Buffer.add_char buf '\n'

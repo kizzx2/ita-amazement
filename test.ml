@@ -14,13 +14,13 @@ let make_test_case in_name ref_name =
 
 let suite = "amazement" >:::
     (List.map (uncurry make_test_case)
-	    [ "sample-mazes", "sample-maze-solutions"
+        [ "sample-mazes", "sample-maze-solutions"
         ; "input1", "output1"
         ; "input2", "output2"
         ; "input3", "output3"
         ; "input4", "output4"
         ; "input5", "output5"
         ; "input6", "output6"
-	    ])
+        ])
 
 let _ = run_test_tt_main suite

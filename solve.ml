@@ -6,10 +6,10 @@ let solve input =
     let module P = Path_find.PathFinder (Maze) in
     let mazes    = Maze.parse_mazes input in
     
-	let solve_maze maze = 
-	    let goal  = Maze.goal maze in
-	    let start = Maze.start maze in
-		P.find maze start goal in
+    let solve_maze maze = 
+        let goal  = Maze.goal maze in
+        let start = Maze.start maze in
+        P.find maze start goal in
     
     let paths = List.map solve_maze mazes in
     let buf   = Buffer.create ((List.length mazes) * 10) in
