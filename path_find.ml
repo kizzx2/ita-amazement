@@ -11,9 +11,7 @@ module type MazeSig = sig
     val go       : t -> Coord.t -> direction -> Coord.t option
 end
     
-let in_list x l = match List.index_of x l with
-    | Some _ -> true
-    | None   -> false
+let in_list x l = List.index_of x l |> Option.is_some
 
 module PathFinder (M : MazeSig) = struct
     
