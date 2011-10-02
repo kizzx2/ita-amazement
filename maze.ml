@@ -5,11 +5,6 @@ type direction = Up | Down | Left | Right
 type coord     = int * int
 type t         = grid array array
 
-module Coord = struct
-    type t      = coord
-    let compare = compare
-end
-
 let grid_of_char = function
     | ' ' -> Space
     | '_' -> HWall

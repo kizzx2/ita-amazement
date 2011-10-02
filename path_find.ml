@@ -2,21 +2,18 @@ open Batteries_uni
 
 module type MazeSig = sig
     type t
-    module Coord : Map.OrderedType
-    
+    type coord
     type direction
+
     val directions : direction list
     
-    val distance : Coord.t -> Coord.t -> int
-    val go       : t -> Coord.t -> direction -> Coord.t option
+    val distance : coord -> coord -> int
+    val go       : t -> coord -> direction -> coord option
 end
     
 let in_list x l = List.index_of x l |> Option.is_some
 
 module PathFinder (M : MazeSig) = struct
-    
-    module CoordMap = Map.Make (M.Coord)
-
     let directions = M.directions
     
     (* A simplified A* algorithm *)
@@ -24,12 +21,12 @@ module PathFinder (M : MazeSig) = struct
     
         let current     = ref start in
         let closed_list = ref [] in
-        let parent_map  = ref CoordMap.empty in
+        let parent_map  = Hashtbl.create 50 in
 
         (* a (score * coord) list *)
         let open_list   = ref [M.distance start goal, !current] in
     
-        let parent_of coord = CoordMap.find coord !parent_map in
+        let parent_of coord = Hashtbl.find parent_map coord in
 
         (* Add adjacent paths to open_list *)
         let scan coord =
@@ -38,8 +35,8 @@ module PathFinder (M : MazeSig) = struct
             |> List.map Option.get
             |> List.filter (not -| flip in_list !closed_list)
             |> List.iter (fun dest ->
-                open_list  := (M.distance dest goal, dest) :: !open_list;
-                parent_map := CoordMap.add dest coord !parent_map ) in
+                open_list := (M.distance dest goal, dest) :: !open_list;
+                Hashtbl.add parent_map dest coord ) in
     
         let retrace_path from =
             Enum.seq from parent_of ((!=) start)

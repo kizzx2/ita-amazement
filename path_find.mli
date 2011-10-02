@@ -1,16 +1,15 @@
 module type MazeSig =
     sig
         type t
+        type coord
         type direction
         
-        module Coord : Map.OrderedType
-        
         val directions : direction list
-        val distance   : Coord.t -> Coord.t -> int
-        val go         : t -> Coord.t -> direction -> Coord.t option
+        val distance   : coord -> coord -> int
+        val go         : t -> coord -> direction -> coord option
     end
 
 module PathFinder : functor (M : MazeSig) ->
     sig
-        val find : M.t -> M.Coord.t -> M.Coord.t -> M.Coord.t list
+        val find : M.t -> M.coord -> M.coord -> M.coord list
     end
