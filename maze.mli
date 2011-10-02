@@ -1,3 +1,5 @@
+(** Parsing/printing of maze and maze "collision detection" logic *)
+
 type t
 module Coord : sig
     type t

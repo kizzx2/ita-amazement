@@ -25,9 +25,11 @@ module PathFinder (M : MazeSig) = struct
     let find maze start goal =
     
         let current     = ref start in
-        let open_list   = ref [M.distance start goal, !current] in
         let closed_list = ref [] in
         let parent_map  = ref CoordMap.empty in
+
+        (* a (score * coord) list *)
+        let open_list   = ref [M.distance start goal, !current] in
     
         let parent_of coord = CoordMap.find coord !parent_map in
 
@@ -41,11 +43,9 @@ module PathFinder (M : MazeSig) = struct
                 open_list  := (M.distance dest goal, dest) :: !open_list;
                 parent_map := CoordMap.add dest coord !parent_map ) in
     
-        let retrace_path =
-            let rec aux acc = function
-                | curr when curr = start -> curr :: acc
-                | curr -> aux (curr :: acc) (parent_of curr) in
-            aux [] in
+        let retrace_path from =
+            Enum.seq from parent_of ((!=) start)
+            |> List.of_enum |> List.rev |> List.cons start in
     
         let open Return in
         
@@ -54,7 +54,10 @@ module PathFinder (M : MazeSig) = struct
                 if !current = goal then return k (retrace_path !current);
                 
                 (* Choose the lowest score from the open list
-                 * and switch it to the closed list, mark it as current *)
+                 * and switch it to the closed list, mark it as current.
+                 *
+                 * Could use a heap for better performance.
+                 *)
                 open_list   := List.sort !open_list;
                 current     := List.hd !open_list |> snd;
                 open_list   := List.drop 1 !open_list;
