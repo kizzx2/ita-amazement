@@ -30,18 +30,16 @@ module PathFinder (M : MazeSig) = struct
         let parent_map  = ref CoordMap.empty in
     
         let parent_of coord = CoordMap.find coord !parent_map in
-            
-        (* Try to add direction to open_list *)
-        let try_direction coord dir =
-            match M.go maze coord dir with
-            | Some dest when not **> in_list dest !closed_list ->
-                open_list  := (M.distance dest goal, dest) :: !open_list;
-                parent_map := CoordMap.add dest coord !parent_map;
-            | None
-            | Some _ -> () in
-    
+
         (* Add adjacent paths to open_list *)
-        let scan coord = List.iter (try_direction coord) directions in
+        let scan coord =
+            List.map (M.go maze coord) directions
+            |> List.filter Option.is_some
+            |> List.map Option.get
+            |> List.filter (not -| flip in_list !closed_list)
+            |> List.iter (fun dest ->
+                open_list  := (M.distance dest goal, dest) :: !open_list;
+                parent_map := CoordMap.add dest coord !parent_map ) in
     
         let retrace_path =
             let rec aux acc = function

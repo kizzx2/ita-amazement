@@ -20,7 +20,7 @@ let char_of_grid = function
     | Space -> ' '
     | HWall -> '_'
     | VWall -> '|'
-    | Path -> 'X'
+    | Path  -> 'X'
 
 let directions = [Up; Down; Left; Right]
 
@@ -40,22 +40,19 @@ let goal maze  = let width  = Array.length maze.(0) in (1, width - 2)
 
 (* Simple hand-rolled parser. Sufficient for our simple need *)
 let parse_maze =
-    let is_grid_char c = c = '|' || c = '_' || c = ' ' in
-
+    let is_grid_char c = c = ' ' || c = '_' || c = '|' in
     let parse_line str =
         let len = String.length str in
-        let sanitized =
-            String.sub str 5 (len-5) |> String.filter is_grid_char in
-        String.explode sanitized |> List.map grid_of_char in
+        String.sub str 5 (len-5)
+        |> String.explode |> List.filter is_grid_char
+        |> List.map grid_of_char |> Array.of_list in
 
-    Array.of_list
-    -| List.map (Array.of_list -| parse_line)
-    -| Str.split (Str.regexp_string "\n") 
+    Array.of_list -| List.map parse_line -| Str.split (Str.regexp_string "\n" )
 
 let parse_mazes =
     List.map parse_maze
     -| Str.split (Str.regexp_string "\n\n")
-    -| Str.global_substitute (Str.regexp_string "\r\n") (const "\n")
+    -| Str.global_replace (Str.regexp_string "\r\n") "\n"
 
 let string_of_maze maze =
     let padding = "     " in
@@ -64,13 +61,17 @@ let string_of_maze maze =
     let num_lines = Array.length maze in
     let buf = Buffer.create (num_lines * 80) in
 
+    (* First line with "ITA" *)
     padding ^ string_of_line maze.(0) ^ "ITA\n" |> Buffer.add_string buf;
-    flip Enum.iter (1--(num_lines - 2))
+
+    foreach (1--(num_lines - 2))
         ( fun i ->
           Buffer.add_string buf padding
         ; Buffer.add_string buf (string_of_line maze.(i))
         ; Buffer.add_char buf '\n'
         );
+
+    (* Last line with "Start" *)
     "Start" ^ string_of_line maze.(num_lines - 1) ^ "\n"
         |> Buffer.add_string buf;
     Buffer.contents buf
